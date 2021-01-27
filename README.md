@@ -28,7 +28,7 @@ Keep in mind, however, that this “on the fly” minification, once the inline 
 
 ### Installation
 1. Download the latest release and extract the content
-2. Use an FTP client to upload **only** the `tidy-assets` folder and the `tidy-asset.php` file into the `plugins` folder of your ZP installation
+2. Use an FTP client to upload **only** the `tidy-assets` folder and the `tidy-assets.php` file into the `plugins` folder of your ZP installation
 3. Activate **tidy-assets** in the Plugins > Seo tab of your admin area
 4. Visit the plugin options page to set them according to your needs
 
