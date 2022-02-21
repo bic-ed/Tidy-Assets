@@ -21,7 +21,7 @@
  */
 
 $plugin_is_filter = 1 | THEME_PLUGIN;
-$plugin_description = gettext_pl("Shifts all Zenphoto JavaScript elements, including inline scripts and optionally CSS resources, to the bottom of the body element. It also offers the opportunity to replace the outdated version of jQuery included in Zenphoto with the latest version available at the time of this plugin’s release date.", "tidy-assets");
+$plugin_description = gettext_pl("Shifts all Zenphoto JavaScript elements, including inline scripts and optionally CSS resources, to the bottom of the body element. It also offers the opportunity to remove the jQuery Migrate plugin, which is included with Zenphoto to ensure compatibility with older themes and plugins.", "tidy-assets");
 $plugin_author = 'Antonio Ranesi (bic-ed)';
 $plugin_version = '1.0.0';
 $plugin_date = '25/01/2021';
@@ -42,6 +42,7 @@ class tidyAssetsOptions {
   */
   function __construct() {
     setOptionDefault('tidy-assets_jquery', false);
+    setOptionDefault('tidy-assets_jq_migrate', 0);
     setOptionDefault('tidy-assets_css', 0);
     setOptionDefault('tidy-assets_comments', 1);
     setOptionDefault('tidy-assets_minify', false);
@@ -53,25 +54,35 @@ class tidyAssetsOptions {
     $jshrink = '<a rel="noopener" target="_blank" href="https://github.com/tedious/JShrink">JShrink</a>';
     $jsqueeze = '<a rel="noopener" target="_blank" href="https://github.com/tchwork/jsqueeze">JSqueeze</a>';
     $options = array(
-      gettext_pl("Use jQuery v3.5.1", "tidy-assets") => array(
+      gettext_pl("jQuery Host", "tidy-assets") => array(
         'key' => 'tidy-assets_jquery',
         'type' => OPTION_TYPE_SELECTOR,
-        'order' => 10,
+        'order' => 90,
         'selections' => array(
-          '1.' . gettext_pl("Self hosted", "tidy-assets") => '/plugins/tidy-assets/jquery/jquery-3.5.1.min.js',
-          '2.' . gettext_pl("Hosted by jQuery", "tidy-assets") => 'https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous',
-          '3.' . gettext_pl("Hosted by Google", "tidy-assets") => 'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
-          '4.' . gettext_pl("Hosted by Microsoft", "tidy-assets") => 'https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js',
-          '5.' . gettext_pl("Hosted by Cloudflare", "tidy-assets") => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js',
-          '6.' . gettext_pl("Hosted by jsDelivr", "tidy-assets") => 'https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js',
+          // '1.' . gettext_pl("Self hosted", "tidy-assets") => '/plugins/tidy-assets/jquery/jquery-3.5.1.min.js',
+          'jQuery' => 'https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous',
+          'Google' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js',
+          'Microsoft' => 'https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.min.js',
+          'Cloudflare' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
+          'jsDelivr' => 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js',
         ),
-        'null_selection' => gettext('No'),
-        'desc' => "<p><em>" . gettext_pl("Please note that not all ZP themes or plugins support this upgraded version.", "tidy-assets")
-        . "</em><br>"
-        . gettext_pl("Select your preferred server among self hosting (recommended) or one of the CDN services listed on the jQuery website.", "tidy-assets")
-        . "</p><p class='notebox'>"
-        . gettext_pl("<strong>Notice:</strong> Provision of assets from a CDN service is explicitly discouraged by Zenphoto guidelines. It may result in the need to be accounted for in your privacy policy terms (in some jurisdictions). Select <strong>1.Self hosted</strong> if you are not sure how to do it correctly or if you want to keep full control of your site.", "tidy-assets")
+        'null_selection' => gettext_pl("Self Hosted", "tidy-assets"),
+        'desc' => gettext_pl("Select your preferred server among self hosting (recommended) or one of the CDN services listed on the jQuery website.", "tidy-assets") . " "
+        . gettext_pl("The self hosted version is the one provided by your Zenphoto installation.", "tidy-assets")
+        . " <strong>"
+        . gettext_pl("The CDNs hosted version is", "tidy-assets")
+        . " v3.6.0 </strong></p>"
+        . "<p class='notebox'>"
+        . gettext_pl("<strong>Notice:</strong> Provision of assets from a CDN service is explicitly discouraged by Zenphoto guidelines. It may result in the need to be accounted for in your privacy policy terms (in some jurisdictions). Select <strong>Self Hosted</strong> if you are not sure how to do it correctly or if you want to keep full control of your site.", "tidy-assets")
         . "</p>"
+      ),
+      gettext_pl("Remove jQuery Migrate", "tidy-assets") => array(
+        'key' => 'tidy-assets_jq_migrate',
+        'type' => OPTION_TYPE_CHECKBOX,
+        'order' => 15,
+        'desc' => gettext_pl("Check to remove jQuery Migrate from your site front-end.", "tidy-assets")
+        . "<br>"
+        . "<p class='notebox'>" . gettext_pl("Check that everything works as expected after enabling this option.", "tidy-assets")
       ),
       gettext_pl("Apply to CSS assets", "tidy-assets") => array(
         'key' => 'tidy-assets_css',
@@ -144,11 +155,15 @@ class tidyAssets {
     // JavaScript assets
     $matches = tidyAssets::extract($data, '~<script.*src="(.*)".*></script>~mU', $skip);
     $js_files = array();
-    $replace_jq = getOption('tidy-assets_jquery');
+    $use_cdn_jq = getOption('tidy-assets_jquery');
+    $remove_jq_migrate = getOption('tidy-assets_jq_migrate');
     while (!empty($matches[1])) { // flush out the duplicates. Earliest wins
       $file = array_pop($matches[1]);
-      if ($replace_jq && $file == "/zp-core/js/jquery.js") { // Update jQuery
-        $file = $replace_jq;
+      if ($use_cdn_jq && $file == "/zp-core/js/jquery.min.js") { // Use CDN for jQuery
+        $file = $use_cdn_jq;
+      }
+      if ($remove_jq_migrate && $file == "/zp-core/js/jquery-migrate.min.js") { // Remove jQuery Migrate
+        continue;
       }
       $js_files[basename($file)] = $file;
     }
