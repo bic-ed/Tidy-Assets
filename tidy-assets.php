@@ -23,8 +23,8 @@
 $plugin_is_filter = 1 | THEME_PLUGIN;
 $plugin_description = gettext_pl("Shifts all Zenphoto JavaScript elements, including inline scripts and optionally CSS resources, to the bottom of the body element. It also offers the opportunity to remove the jQuery Migrate plugin, which is included with Zenphoto to ensure compatibility with older themes and plugins.", "tidy-assets");
 $plugin_author = 'Antonio Ranesi (bic-ed)';
-$plugin_version = '1.0.0';
-$plugin_date = '25/01/2021';
+$plugin_version = '1.1';
+$plugin_date = '03/01/2023';
 $plugin_category = gettext('SEO');
 $plugin_URL = "http://www.antonioranesi.it/pages/tidy-assets-zenphoto-plugin";
 $plugin_siteurl = "http://www.antonioranesi.it/pages/tidy-assets-zenphoto-plugin";
@@ -60,18 +60,18 @@ class tidyAssetsOptions {
         'order' => 90,
         'selections' => array(
           // '1.' . gettext_pl("Self hosted", "tidy-assets") => '/plugins/tidy-assets/jquery/jquery-3.5.1.min.js',
-          'jQuery' => 'https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous',
-          'Google' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js',
+          'jQuery' => 'https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous',
+          'Google' => 'https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js',
           'Microsoft' => 'https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.0.min.js',
-          'Cloudflare' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js',
-          'jsDelivr' => 'https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js',
+          'Cloudflare' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js',
+          'jsDelivr' => 'https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js',
         ),
         'null_selection' => gettext_pl("Self Hosted", "tidy-assets"),
         'desc' => gettext_pl("Select your preferred server among self hosting (recommended) or one of the CDN services listed on the jQuery website.", "tidy-assets") . " "
         . gettext_pl("The self hosted version is the one provided by your Zenphoto installation.", "tidy-assets")
         . " <strong>"
         . gettext_pl("The CDNs hosted version is", "tidy-assets")
-        . " v3.6.0 </strong></p>"
+        . " v3.6.3, but the one from Google (v3.6.1) and Microsoft (v3.6.0) </strong></p>"
         . "<p class='notebox'>"
         . gettext_pl("<strong>Notice:</strong> Provision of assets from a CDN service is explicitly discouraged by Zenphoto guidelines. It may result in the need to be accounted for in your privacy policy terms (in some jurisdictions). Select <strong>Self Hosted</strong> if you are not sure how to do it correctly or if you want to keep full control of your site.", "tidy-assets")
         . "</p>"
@@ -141,7 +141,7 @@ class tidyAssets {
      * Unique identification strings to recognize the elements not to be moved
      * @var array
      */
-    $skip = explode(PHP_EOL, getOption('tidy-assets_skip'));
+    $skip = preg_split('~\R~', getOption('tidy-assets_skip'));
     foreach ($skip as $key => $value) {
       if (empty($value)) {
         unset($skip[$key]);
@@ -189,13 +189,32 @@ class tidyAssets {
     }
 
     // Other Items
-    $other_items = explode("\n", $data);
+    // While we are here, let's do some additional cleaning (if not in a <pre> tag)
+    $other_items = preg_split('~\R~', $data);
+    $in_a_pre_tag = false;
     foreach ($other_items as $key=>$line) {
+      if ($in_a_pre_tag === false && strpos($line, '<pre') !== false) {
+        if (strpos($line, '</pre>') === false) {
+          $in_a_pre_tag = true;
+        }
+        $line = ltrim($line);
+        $other_items[$key] = $line;
+        continue;
+      }
+      if ($in_a_pre_tag === true && strpos($line, '</pre>') === false) {
+        continue;
+      } else if (strpos($line, '</pre>') !== false) {
+        $in_a_pre_tag = false;
+        $line = rtrim($line);
+        $other_items[$key] = $line;
+        continue;
+      }
+      // If we got here, we are not in a <pre> tag
+      $in_a_pre_tag = false;
       $line = trim($line);
       if (empty($line)) {
         unset($other_items[$key]);
       } else {
-        // While we are here, let's do some additional cheap cleaning:
         // 1.Removing the empty class attribute produced sometimes by some Zenphoto functions
         $line = str_replace(' class=""', '', $line);
         // 2.Replacing multiple spaces/tabs with a single space

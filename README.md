@@ -4,9 +4,9 @@
 ### What it does
 Tidy Assets shifts all Zenphoto JavaScript elements, including inline scripts and optionally CSS resources, to the bottom of the _body_ element. This could improve the user experience on their first visit to your site, by delaying render-blocking resources.
 
-It also offers the option to replace the outdated version of jQuery included in Zenphoto with the latest upgrade available at the time of this plugin release date. The latter feature, however, is not suitable for every existing Zenphoto theme or plugin, as some of them still use functions that have been dropped in recent updates of jQuery. This is also the reason why Zenphoto doesn’t provide a newer version of the library yet.
+It also offers the option to remove the jQuery Migrate plugin, which is included with Zenphoto since v1.6 to ensure compatibility with older themes and plugins.
 
-Both of the above features could have a positive SEO impact, since the loading speed of a page is one of the parameters involved in determining its ranking. Moreover, the upgraded version of jQuery has a smaller size also, as some support for very old browsers has been removed.
+Both of the above features could have a positive SEO impact, since the loading speed of a page is one of the parameters involved in determining its ranking.
 
 Attributes other than _rel=“stylesheet”_ of moved elements are not reflected in the output. In most cases, these are attributes that are not actually needed, such as _type=“text/javascript”_ and _type=“text/css”_, unnecessary in HTML5, or _async_ and _defer_, which lose their importance after the resources have been moved to the bottom of the _body_ element.
 
@@ -38,10 +38,6 @@ Tidy Assets is translatable by configuring a [Poedit](https://poedit.net/) catal
 ### Credits
 This plugin has been developed starting from [headConsolidator v1.4.3](https://www.zenphoto.org/news/headConsolidator/) by Stephen Billard (sbillard).
 
-It includes some third party software for optional functionalities:
-- [JShrink](https://github.com/tedious/JShrink) and [JSqueeze](https://github.com/tchwork/jsqueeze) for “on the fly” minification
-- [jQuery](https://jquery.com/) to replace the version included in Zenphoto.
-
-Refer to their sites for licensing information.
+It includes [JShrink](https://github.com/tedious/JShrink) and [JSqueeze](https://github.com/tchwork/jsqueeze) for optional “on the fly” minification. Refer to their sites for licensing information.
 
 Special thanks to [acrylian](https://github.com/acrylian) for suggestions and support.
