@@ -4,15 +4,14 @@
  * {@link https://www.zenphoto.org/news/headConsolidator/ headConsolidator v1.4.3}
  * by Stephen Billard (sbillard).
  *
- * Tidy Assets collects the most part of the Zenphoto’s PHP output, starting
- * from the first line printed by the "theme_head" registered filters and
- * stopping at the position where the "theme_body_close" filter registering is
- * placed in the PHP theme scripts, which is just before the closing body tag.
- * The collected output is then parsed into JS, CSS and Other Items. The inline
- * JS is consolidated into one script tag only, and can be optionally minified
- * “on the fly”, with JShrink or JSqueeze. At the end, Other Items are printed
- * first, followed by CSS files references, JS files references and at last by
- * the consolidated inline script.
+ * Tidy Assets collects the most part of the Zenphoto’s PHP output, starting from the
+ * first line printed by the "theme_head" registered filters and stopping at the position
+ * where the "theme_body_close" filter registering is placed in the PHP theme scripts,
+ * which is just before the closing body tag. The collected output is then parsed into JS,
+ * CSS and Other Items. The internal JS is consolidated into one script tag only, and can
+ * be optionally minified “on the fly”, with JShrink or JSqueeze. At the end, Other Items
+ * are printed first, followed by CSS files references, JS files references and at last by
+ * the consolidated internal script.
  *
  * @author Antonio Ranesi (bic-ed)
  * @license GPL v2 or later
@@ -21,7 +20,7 @@
  */
 
 $plugin_is_filter = 1 | THEME_PLUGIN;
-$plugin_description = gettext_pl("Shifts all Zenphoto JavaScript elements, including inline scripts and optionally CSS resources, to the bottom of the body element. It also offers the opportunity to remove the jQuery Migrate plugin, which is included with Zenphoto to ensure compatibility with older themes and plugins.", "tidy-assets");
+$plugin_description = gettext_pl("Shifts all Zenphoto JavaScript elements, including internal scripts and optionally CSS resources, to the bottom of the body element. It also offers the opportunity to remove the jQuery Migrate plugin, which is included with Zenphoto to ensure compatibility with older themes and plugins.", "tidy-assets");
 $plugin_author = 'Antonio Ranesi (bic-ed)';
 $plugin_version = '1.1';
 $plugin_date = '03/01/2023';
@@ -50,7 +49,6 @@ class tidyAssetsOptions {
   }
 
   function getOptionsSupported() {
-    // global $_zp_admin_tab;
     $jshrink = '<a rel="noopener" target="_blank" href="https://github.com/tedious/JShrink">JShrink</a>';
     $jsqueeze = '<a rel="noopener" target="_blank" href="https://github.com/tchwork/jsqueeze">JSqueeze</a>';
     $options = array(
@@ -96,7 +94,7 @@ class tidyAssetsOptions {
         'order' => 30,
         'desc' => gettext_pl("Print comments in HTML output to let you know what has been relocated and where. Processing time is printed as well, in a comment at the end of the plugin output.", "tidy-assets")
       ),
-      gettext_pl("Minify inline JavaScript", "tidy-assets") => array(
+      gettext_pl("Minify internal JavaScript", "tidy-assets") => array(
         'key' => 'tidy-assets_minify',
         'type' => OPTION_TYPE_SELECTOR,
         'order' => 40,
@@ -105,7 +103,7 @@ class tidyAssetsOptions {
           gettext_pl("With JShrink", "tidy-assets") => 'tidy-assets_jshrink',
         ),
         'null_selection' => gettext('No'),
-        'desc' => sprintf(gettext_pl("By removing unnecessary characters, %s reduces the consolidated script size by approximately 20%%. It’s a bit faster than %s, which in return does some further optimizations as well, sparing up to 30%% of the original size. The difference in processing time between the two algorithms is very similar to the difference in compression ratios. Note that this <strong>“on the fly” minification</strong>, once inline code has already been shifted at the bottom of the DOM, <strong>is almost always useless</strong> when not counterproductive for SEO/performance optimization purposes, especially if gzip compression is enabled on the server.", "tidy-assets"), $jshrink, $jsqueeze)
+        'desc' => sprintf(gettext_pl("By removing unnecessary characters, %s reduces the consolidated script size by approximately 20%%. It’s a bit faster than %s, which in return does some further optimizations as well, sparing up to 30%% of the original size. The difference in processing time between the two algorithms is very similar to the difference in compression ratios. Note that this <strong>“on the fly” minification</strong>, once internal code has already been shifted at the bottom of the DOM, <strong>is almost always useless</strong> when not counterproductive for SEO/performance optimization purposes, especially if gzip compression is enabled on the server.", "tidy-assets"), $jshrink, $jsqueeze)
       ),
       gettext_pl("Skip elements", "tidy-assets") => array(
         'key' => 'tidy-assets_skip',
@@ -117,7 +115,7 @@ class tidyAssetsOptions {
         . '</p><p>'
         . gettext_pl("For JS and CSS files, the best candidate is of course the file link, without quotes. If the link for a CSS file is <code>href=\"some_path/some_file.css\"</code>, you should use <code>some_path/some_file.css</code>, but even just <code>some_file.css</code> might be enough.", "tidy-assets")
         . '</p><p>'
-        . gettext_pl("For an inline JS script, you will need to spot some part of the code that is not repeated identically in any other script. It could be the name of a function, your analytics code or so. A script containing <code>function pageselectCallback</code> could be added to the list by typing <code>function pageselectCallback</code> or even just <code>pageselectCallback</code>, provided that there are no other inline script containing the same string.", "tidy-assets")
+        . gettext_pl("For an internal JS script, you will need to spot some part of the code that is not repeated identically in any other script. It could be the name of a function, your analytics code or so. A script containing <code>function pageselectCallback</code> could be added to the list by typing <code>function pageselectCallback</code> or even just <code>pageselectCallback</code>, provided that there are no other internal script containing the same string.", "tidy-assets")
         . '<p>'
       ),
     );
@@ -168,13 +166,19 @@ class tidyAssets {
       $js_files[basename($file)] = $file;
     }
 
-    // Inline JavaScript
+    // Internal JavaScript
     $matches = tidyAssets::extract($data, '~<script.*>(.*)</script>~mUs', $skip);
-    $jsi = $matches[1];
-    if (!empty($jsi)) {
-      $inline_js = '';
-      foreach ($jsi as $somejs) {
-        $inline_js .= '  ' . trim($somejs) . "\n";
+    $internal_js = $matches[1];
+    if (!empty($internal_js)) {
+      $internal_js_output = '';
+      foreach ($internal_js as $some_js) {
+        $some_js = trim($some_js);
+        // Ensure a semicolon after each internal js.
+        $semicolon = '';
+        if (substr($some_js, -1) != ';') {
+          $semicolon = ';';
+        }
+        $internal_js_output .= $some_js . $semicolon . "\n";
       }
     }
 
@@ -252,25 +256,25 @@ class tidyAssets {
       echo $js_files;
     }
 
-    // ...Inline JavaScript...
-    if (!empty($inline_js)) {
-      $comment = "<!-- Tidy Assets-> Consolidated Inline JavaScript";
+    // ...Internal JavaScript...
+    if (!empty($internal_js_output)) {
+      $comment = "<!-- Tidy Assets-> Consolidated Internal JavaScript";
       if ($use_minifier = getOption('tidy-assets_minify')) {
         if ($use_minifier == 'tidy-assets_jshrink') {
           $comment .= ", minified with JShrink";
           require_once 'tidy-assets/JShrink/Minifier.php';
-          $inline_js = \JShrink\Minifier::minify($inline_js) . "\n";
+          $internal_js_output = \JShrink\Minifier::minify($internal_js_output) . "\n";
         } else {
           $comment .= ", minified with JSqueeze";
           require_once 'tidy-assets/jsqueeze/JSqueeze.php';
           $jz = new \Patchwork\JSqueeze();
-          $inline_js = $jz->squeeze($inline_js) . "\n";
+          $internal_js_output = $jz->squeeze($internal_js_output) . "\n";
         }
       }
       if (isset($start)) {
         echo $comment . " -->\n";
       }
-      echo "<script>\n" . $inline_js . "</script>\n";
+      echo "<script>\n" . $internal_js_output . "</script>\n";
     }
 
     // ...Ending comment and processing time.
@@ -279,7 +283,7 @@ class tidyAssets {
       echo "<!-- Tidy Assets End-> No changes after this line. Completed in "
       . round(($end - $start) * 1000, 2) . " ms -->\n";
     }
-    /* NOTE: Uncomment below to print the filtering array for debugging */
+    /* NOTE! Uncomment below to print the filtering array for debugging */
     // echo "<!-- Filter's search strings\n======================\n";
     // print_r($skip);
     // echo "====================== -->\n";
@@ -300,7 +304,7 @@ class tidyAssets {
       if (!empty($filter)) {
         if (tidyAssets::strposArray($matches[1][$key], $filter)) {
           unset($matches[1][$key]);
-        } elseif (!empty($matches[1][$key])) { // Otherwise, parsing inline JS purges unmoved JS files
+        } elseif (!empty($matches[1][$key])) { // Otherwise, parsing internal JS purges unmoved JS files
           $data = trim(str_replace($found, '', $data));
         }
       } else {

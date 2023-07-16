@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tidy Assets v1.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-19 19:02+0100\n"
-"PO-Revision-Date: 2022-02-19 19:02+0100\n"
+"POT-Creation-Date: 2023-07-16 14:15+0200\n"
+"PO-Revision-Date: 2023-07-16 14:15+0200\n"
 "Last-Translator: Antonio <ranesi@tiscali.it>\n"
 "Language-Team: \n"
 "Language: it_IT\n"
@@ -14,30 +14,30 @@ msgstr ""
 "X-Poedit-KeywordsList: ;gettext_pl\n"
 "X-Poedit-Basepath: ../../../..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.3.2\n"
 "X-Poedit-SearchPath-0: tidy-assets.php\n"
 
-#: tidy-assets.php:24
+#: tidy-assets.php:23
 msgid ""
-"Shifts all Zenphoto JavaScript elements, including inline scripts and "
+"Shifts all Zenphoto JavaScript elements, including internal scripts and "
 "optionally CSS resources, to the bottom of the body element. It also offers "
 "the opportunity to remove the jQuery Migrate plugin, which is included with "
 "Zenphoto to ensure compatibility with older themes and plugins."
 msgstr ""
-"Sposta tutti gli elementi JavaScript di Zenphoto, compresi gli script inline "
-"e facoltativamente le risorse CSS, alla fine dell’elemento body. Offre anche "
-"l'opportunità di rimuovere il plugin jQuery Migrate, che è incluso in "
-"Zenphoto per garantire la compatibilità con vecchi temi e plugin."
+"Sposta tutti gli elementi JavaScript di Zenphoto, compresi gli script "
+"interni e facoltativamente le risorse CSS, alla fine dell’elemento body. "
+"Offre anche l'opportunità di rimuovere il plugin jQuery Migrate, che è "
+"incluso in Zenphoto per garantire la compatibilità con vecchi temi e plugin."
 
-#: tidy-assets.php:57
+#: tidy-assets.php:55
 msgid "jQuery Host"
 msgstr "Host per jQuery"
 
-#: tidy-assets.php:69
+#: tidy-assets.php:67
 msgid "Self Hosted"
 msgstr "Self Hosted"
 
-#: tidy-assets.php:70
+#: tidy-assets.php:68
 msgid ""
 "Select your preferred server among self hosting (recommended) or one of the "
 "CDN services listed on the jQuery website."
@@ -45,17 +45,17 @@ msgstr ""
 "Scegli il server preferito tra self hosting (consigliato) e uno dei servizi "
 "CDN elencati sul sito di jQuery."
 
-#: tidy-assets.php:71
+#: tidy-assets.php:69
 msgid ""
 "The self hosted version is the one provided by your Zenphoto installation."
 msgstr ""
 "La versione self hosted è quella fornita dalla tua installazione di Zenphoto."
 
-#: tidy-assets.php:73
+#: tidy-assets.php:71
 msgid "The CDNs hosted version is"
 msgstr "La versione ospitata su CDN è"
 
-#: tidy-assets.php:76
+#: tidy-assets.php:74
 msgid ""
 "<strong>Notice:</strong> Provision of assets from a CDN service is "
 "explicitly discouraged by Zenphoto guidelines. It may result in the need to "
@@ -70,24 +70,24 @@ msgstr ""
 "strong> se non sai come farlo correttamente o se vuoi mantenere il pieno "
 "controllo del tuo sito."
 
-#: tidy-assets.php:79
+#: tidy-assets.php:77
 msgid "Remove jQuery Migrate"
 msgstr "Rimuovi jQuery Migrate"
 
-#: tidy-assets.php:83
+#: tidy-assets.php:81
 msgid "Check to remove jQuery Migrate from your site front-end."
 msgstr "Seleziona per rimuovere jQuery Migrate dal front-end del tuo sito."
 
-#: tidy-assets.php:85
+#: tidy-assets.php:83
 msgid "Check that everything works as expected after enabling this option."
 msgstr ""
 "Verifica che tutto funzioni come previsto dopo aver attivato questa opzione."
 
-#: tidy-assets.php:87
+#: tidy-assets.php:85
 msgid "Apply to CSS assets"
 msgstr "Includi gli asset CSS"
 
-#: tidy-assets.php:91
+#: tidy-assets.php:89
 msgid ""
 "Shifts the CSS assets to the bottom of the <code>body</code> element as "
 "well, just before the JavaScript elements."
@@ -95,11 +95,11 @@ msgstr ""
 "Sposta anche le risorse CSS in fondo all’elemento <code>body</code>, subito "
 "prima degli elementi JavaScript."
 
-#: tidy-assets.php:93
+#: tidy-assets.php:91
 msgid "Output comments"
 msgstr "Produci commenti"
 
-#: tidy-assets.php:97
+#: tidy-assets.php:95
 msgid ""
 "Print comments in HTML output to let you know what has been relocated and "
 "where. Processing time is printed as well, in a comment at the end of the "
@@ -109,19 +109,19 @@ msgstr ""
 "spostato e dove. Sarà visualizzato anche il tempo di elaborazione, in un "
 "commento alla fine dell’output del plugin."
 
-#: tidy-assets.php:99
-msgid "Minify inline JavaScript"
-msgstr "Minimizza il JavaScript inline"
+#: tidy-assets.php:97
+msgid "Minify internal JavaScript"
+msgstr "Minimizza il JavaScript interno"
 
-#: tidy-assets.php:104
+#: tidy-assets.php:102
 msgid "With JSqueeze"
 msgstr "Con JSqueeze"
 
-#: tidy-assets.php:105
+#: tidy-assets.php:103
 msgid "With JShrink"
 msgstr "Con JShrink"
 
-#: tidy-assets.php:108
+#: tidy-assets.php:106
 #, php-format
 msgid ""
 "By removing unnecessary characters, %s reduces the consolidated script size "
@@ -129,7 +129,7 @@ msgid ""
 "further optimizations as well, sparing up to 30%% of the original size. The "
 "difference in processing time between the two algorithms is very similar to "
 "the difference in compression ratios. Note that this <strong>“on the fly” "
-"minification</strong>, once inline code has already been shifted at the "
+"minification</strong>, once internal code has already been shifted at the "
 "bottom of the DOM, <strong>is almost always useless</strong> when not "
 "counterproductive for SEO/performance optimization purposes, especially if "
 "gzip compression is enabled on the server."
@@ -137,19 +137,19 @@ msgstr ""
 "Eliminando i caratteri non indispensabili, %s riduce la dimensione dello "
 "script consolidato di circa il 20%%. È un po’ più veloce di %s, che in "
 "cambio esegue anche ulteriori ottimizzazioni, risparmiando fino al 30%% "
-"della dimensione originale.La differenza tra i tempi di elaborazione dei due "
-"algoritmi è molto simile alla differenza tra i rispettivi rapporti di "
+"della dimensione originale. La differenza tra i tempi di elaborazione dei "
+"due algoritmi è molto simile alla differenza tra i rispettivi rapporti di "
 "compressione. Si noti che questa minimizzazione <strong>“al volo”</strong>, "
-"una volta che il codice inline è già stato spostato nella parte inferiore "
+"una volta che il codice interno è già stato spostato nella parte inferiore "
 "del DOM, è quasi sempre inutile quando non controproducente allo scopo di "
 "ottimizzare SEO/prestazioni, specialmente se la compressione gzip è "
 "abilitata sul server."
 
-#: tidy-assets.php:110
+#: tidy-assets.php:108
 msgid "Skip elements"
 msgstr "Salta elementi"
 
-#: tidy-assets.php:116
+#: tidy-assets.php:114
 msgid ""
 "This is a filter used to prevent shifting specific elements that must remain "
 "in their original positions. For each of these items, if you have any, enter "
@@ -161,11 +161,11 @@ msgstr ""
 "ciascuno di questi, se ce ne sono, inserisci qui una stringa identificativa "
 "univoca, un elemento per riga."
 
-#: tidy-assets.php:118
+#: tidy-assets.php:116
 msgid ""
 "For JS and CSS files, the best candidate is of course the file link, without "
-"quotes. If the link for a CSS file is <code>href=\"some_path/some_file.css"
-"\"</code>, you should use <code>some_path/some_file.css</code>, but even "
+"quotes. If the link for a CSS file is <code>href=\"some_path/some_file."
+"css\"</code>, you should use <code>some_path/some_file.css</code>, but even "
 "just <code>some_file.css</code> might be enough."
 msgstr ""
 "Per i file JS e CSS, il candidato ideale è senz’altro il link al file, senza "
@@ -173,194 +173,20 @@ msgstr ""
 "questo_file.css\"</code>, dovresti usare <code>qualche_percorso/questo_file."
 "css</code>, ma anche solo <code>questo_file.css</code> potrebbe funzionare."
 
-#: tidy-assets.php:120
+#: tidy-assets.php:118
 msgid ""
-"For an inline JS script, you will need to spot some part of the code that is "
-"not repeated identically in any other script. It could be the name of a "
+"For an internal JS script, you will need to spot some part of the code that "
+"is not repeated identically in any other script. It could be the name of a "
 "function, your analytics code or so. A script containing <code>function "
 "pageselectCallback</code> could be added to the list by typing "
 "<code>function pageselectCallback</code> or even just "
-"<code>pageselectCallback</code>, provided that there are no other inline "
+"<code>pageselectCallback</code>, provided that there are no other internal "
 "script containing the same string."
 msgstr ""
-"Per uno script JS inline, dovrai individuare qualche pezzo di codice che non "
-"si ripete identico in nessun altro script. Potrebbe essere il nome di una "
-"funzione, il tuo codice analytics e così via. Uno script che contiene "
+"Per uno script JS interno, dovrai individuare qualche pezzo di codice che "
+"non si ripete identico in nessun altro script. Potrebbe essere il nome di "
+"una funzione, il tuo codice analytics e così via. Uno script che contiene "
 "<code>function pageselectCallback</code> potrebbe essere aggiunto alla lista "
 "inserendo <code>function pageselectCallback</code> o anche solo "
 "<code>pageselectCallback</code>, purché non ci siano altri script contenenti "
 "la stessa stringa."
-
-#~ msgid ""
-#~ "Note that not all themes and plugins support the current version of "
-#~ "jQuery."
-#~ msgstr ""
-#~ "Verifica che tutto funzioni come previsto dopo aver attivato questa "
-#~ "opzione."
-
-#~ msgid "Use jQuery v3.5.1"
-#~ msgstr "Usa jQuery v3.5.1"
-
-#~ msgid "Hosted by jQuery"
-#~ msgstr "Ospitato da jQuery"
-
-#~ msgid "Hosted by Google"
-#~ msgstr "Ospitato da Google"
-
-#~ msgid "Hosted by Microsoft"
-#~ msgstr "Ospitato da Microsoft"
-
-#~ msgid "Hosted by Cloudflare"
-#~ msgstr "Ospitato da Cloudflare"
-
-#~ msgid "Hosted by jsDelivr"
-#~ msgstr "Ospitato da jsDelivr"
-
-#~ msgid ""
-#~ "Provides a magnifier for images thumbs in album and search result pages."
-#~ msgstr ""
-#~ "Fornisce un ingrandimento per le miniature delle immagini, negli album e "
-#~ "nei risultati delle ricerche."
-
-#~ msgid "Media"
-#~ msgstr "Media"
-
-#~ msgid "Zoom size"
-#~ msgstr "Dimensione dello Zoom"
-
-#~ msgid "Pixel length for the longest side of the zoomed image."
-#~ msgstr "Lunghezza in pixel per il lato lungo dell'immagine ingrandita."
-
-#~ msgid "Delay"
-#~ msgstr "Ritardo"
-
-#~ msgid ""
-#~ "Delay for <code>mousestop</code> event, in milliseconds. If set to "
-#~ "<b><code>0</code></b> behaves like <code>mouseenter</code> <b>(not "
-#~ "recommended)</b>."
-#~ msgstr ""
-#~ "Ritardo per l’evento <code>mousestop</code>, in millisecondi. Se "
-#~ "impostato su <b><code>0</code></b> genera un comportamento tipo "
-#~ "<code>mouseenter</code> <b>(sconsigliato)</b>."
-
-#~ msgid "Offset X"
-#~ msgstr "Regolazione fine X"
-
-#~ msgid ""
-#~ "Fine positioning to center zoom over its thumb orizzontally, in pixels "
-#~ "&larr;(-) (+)&rarr;"
-#~ msgstr ""
-#~ "Posizionamento orizzontale di precisione dello zoom sulla miniatura "
-#~ "corrispondente, in pixel &larr;(-) (+)&rarr;"
-
-#~ msgid "Offset Y"
-#~ msgstr "Regolazione fine Y"
-
-#~ msgid ""
-#~ "Fine positioning to center zoom over its thumb vertically, in pixels "
-#~ "&darr;(+) (-)&uarr;"
-#~ msgstr ""
-#~ "Posizionamento verticale di precisione dello zoom sulla miniatura "
-#~ "corrispondente, in pixel &darr;(+) (-)&uarr;"
-
-#~ msgid "Pages enabled"
-#~ msgstr "Pagine abilitate"
-
-#~ msgid "Album"
-#~ msgstr "Album"
-
-#~ msgid "Search"
-#~ msgstr "Ricerca"
-
-#~ msgid "Both"
-#~ msgstr "Entrambe"
-
-#~ msgid "Pages where the zoom will be available."
-#~ msgstr "Pagine in cui si desidera che lo zoom sia disponibile."
-
-#~ msgid "Triggering class"
-#~ msgstr "Classe d’attivazione"
-
-#~ msgid ""
-#~ "If you are using a non-official theme, try to insert here the <b>CSS "
-#~ "class of the HTML element containing your thumbs</b>. The default value "
-#~ "is <code><b>imagethumb</b></code>, currently used by every official "
-#~ "Zenphoto theme."
-#~ msgstr ""
-#~ "Se usi un tema non ufficiale, prova a inserire qui la <b>classe CSS "
-#~ "dell’elemento HTML che contiene le miniature</b>. Il valore predefinito è "
-#~ "<code><b>imagethumb</b></code>, attualmente utilizzato da tutti i temi "
-#~ "ufficiali di Zenphoto."
-
-#~ msgid "Show title"
-#~ msgstr "Mostra titolo"
-
-#~ msgid ""
-#~ "Display the image title in the zoom popup, preventing the default browser "
-#~ "tooltip."
-#~ msgstr ""
-#~ "Visualizza il titolo dell’immagine nel popup dello zoom, prevenendo il "
-#~ "tooltip predefinito del browser."
-
-#~ msgid "Title position"
-#~ msgstr "Posizione del titolo"
-
-#~ msgid "Overlay"
-#~ msgstr "Sovrapposto"
-
-#~ msgid "Append"
-#~ msgstr "Sotto"
-
-#~ msgid ""
-#~ "Choose the position of image title in the zoom popup.<ul><li><b>Overlay</"
-#~ "b>: Title layered at the bottom of the image</li><li><b>Append</b>: Title "
-#~ "placed just below the image</li></ul> .</p>"
-#~ msgstr ""
-#~ "Scegli dove posizionare il titolo della foto nel popup dello zoom."
-#~ "<ul><li><b>Sovrapposto</b>: Titolo sovrapposto alla parte bassa "
-#~ "dell’immagine</li><li><b>Sotto</b>: Titolo posizionato immediatamente "
-#~ "sotto l’immagine</li></ul> .</p>"
-
-#~ msgid "Approach"
-#~ msgstr "Metodo"
-
-#~ msgid "Ajax request"
-#~ msgstr "Richiesta ajax"
-
-#~ msgid "PHP loop"
-#~ msgstr "Ciclo PHP"
-
-#~ msgid ""
-#~ "Is the way in which the plugin detects and prepares the image to be "
-#~ "zoomed:<ul><li><b>Ajax request</b> works with every official Zenphoto "
-#~ "theme</li><li><b>PHP loop</b> requires adding theme support manually</"
-#~ "li></ul><p class=\"notebox\"><strong>Note:</strong> do not change this "
-#~ "option before reading the <a target=\"_blank\"  href=\"https://www."
-#~ "antonioranesi.it/pages/thumbszoom-zenphoto-plugin#approach"
-#~ "\">documentation</a>.</p>"
-#~ msgstr ""
-#~ "È il sistema con cui il plug-in determina l'immagine da ingrandire e la "
-#~ "prepara:<ul><li><b>Richiesta ajax</b> funziona con tutti i temi ufficiali "
-#~ "di Zenphoto</li><li><b>Ciclo PHP</b> richiede l’implementazione manuale "
-#~ "della predisposizione del tema</li></ul><p class=\"notebox\"><strong>Nota:"
-#~ "</strong> non cambiare questa opzione prima di aver letto la <a target="
-#~ "\"_blank\"  href=\"https://www.antonioranesi.it/pages/thumbszoom-zenphoto-"
-#~ "plugin#approach\">documentazione</a>.</p>"
-
-#~ msgid "Container CSS class"
-#~ msgstr "Classe CSS del contenitore"
-
-#~ msgid "Hover"
-#~ msgstr "Sovrapposto"
-
-#~ msgid "Engine"
-#~ msgstr "Metodo"
-
-#~ msgid "Adds a thumbs magnifier in album pages."
-#~ msgstr "magnifica la cazzo"
-
-#~ msgid "Ajax"
-#~ msgstr "pazzi"
-
-#~ msgid "Theme based"
-#~ msgstr "basato"
